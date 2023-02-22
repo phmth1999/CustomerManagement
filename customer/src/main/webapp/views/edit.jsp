@@ -20,11 +20,6 @@
 						<c:if test="${edit == 'edit' }">
 							<h2>Edit</h2>
 						</c:if>
-						<input hidden="" name="fullnamePageSearch" value="${fullnamePageSearch }" />
-						<input hidden="" name="sexPageSearch" value="${sexPageSearch }" />
-						<input hidden="" name="birthdayFirstPageSearch" value="${birthdayFirstPageSearch }" />
-						<input hidden="" name="birthdayLastPageSearch" value="${birthdayLastPageSearch }" />
-						<input hidden="" value="${currentPageSearch }" name="currentPageSearch" />
 						<c:if test="${edit == 'edit' }">
 							<div class="group-input">
 								<label for="id">Id:</label> 

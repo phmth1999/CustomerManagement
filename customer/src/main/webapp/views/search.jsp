@@ -84,7 +84,6 @@
 						Pre
 					</div>
 					<input id="page" hidden="" name="page" value="${currentPage }" />
-					<input id="totalPage" hidden="" name="totalPage" value="${totalPage }" />
 					<div>
 						Next
 						<script>
@@ -133,7 +132,7 @@
 							<c:forEach var="item" items="${listCustomer }">
 								<tr>
 									<td><input type="checkbox" name="checkBoxItem" value="${item.id }"/></td>
-									<td><a href="${pageContext.request.contextPath}/edit?customerID=${item.id }&currentPageSearch=${currentPage }&fullname=${fullname }&sex=${sex }&birthdayFirst=${birthdayFirst }&birthdayLast=${birthdayLast }">${item.id }</a></td>
+									<td><a href="${pageContext.request.contextPath}/edit?customerID=${item.id }">${item.id }</a></td>
 									<td>${item.fullname }</td>
 									<td>${item.sex }</td>
 									<td>${item.birthday }</td>

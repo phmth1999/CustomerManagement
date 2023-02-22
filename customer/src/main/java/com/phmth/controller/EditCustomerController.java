@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.phmth.dto.FormSearch;
 import com.phmth.model.AccountModel;
 import com.phmth.model.CustomerModel;
 import com.phmth.service.CustomerService;
@@ -22,18 +23,10 @@ public class EditCustomerController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		int page = 1;
 		int customerID = 0;
 		try {
-			String fullnamePageSearch = req.getParameter("fullname");
-			String sexPageSearch = req.getParameter("sex");
-			String birthdayFirstPageSearch = req.getParameter("birthdayFirst");
-			String birthdayLastPageSearch = req.getParameter("birthdayLast");
 			AccountModel accountLogin = (AccountModel) session.getAttribute("accountLogin");
 			if (accountLogin != null) {
-				if (req.getParameter("currentPageSearch") != null && req.getParameter("currentPageSearch") != "") {
-					page = Integer.parseInt(req.getParameter("currentPageSearch").toString());
-				}
 				if (req.getParameter("customerID") != null && req.getParameter("customerID") != "") {
 					customerID = Integer.parseInt(req.getParameter("customerID").toString());
 				}
@@ -43,11 +36,6 @@ public class EditCustomerController extends HttpServlet {
 					req.setAttribute("edit", "edit");
 					req.setAttribute("customer", customerService.getCustomerById(customerID));
 				}
-				req.setAttribute("currentPageSearch", page);
-				req.setAttribute("fullnamePageSearch", fullnamePageSearch);
-				req.setAttribute("sexPageSearch", sexPageSearch);
-				req.setAttribute("birthdayFirstPageSearch", birthdayFirstPageSearch);
-				req.setAttribute("birthdayLastPageSearch", birthdayLastPageSearch);
 				RequestDispatcher rd = req.getRequestDispatcher("/views/edit.jsp");
 				rd.forward(req, resp);
 			}
@@ -58,6 +46,7 @@ public class EditCustomerController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
 		int customerID = 0;
 		try {
 			if (req.getParameter("id") != null && req.getParameter("id") != "") {
@@ -69,7 +58,6 @@ public class EditCustomerController extends HttpServlet {
 			String email = req.getParameter("email").toString();
 			String phone = req.getParameter("phone").toString();
 			String address = req.getParameter("address").toString();
-			int currentPageSearch = Integer.parseInt(req.getParameter("currentPageSearch").toString());
 
 			CustomerModel customerModel = new CustomerModel();
 			customerModel.setId(customerID);
@@ -79,18 +67,18 @@ public class EditCustomerController extends HttpServlet {
 			customerModel.setEmail(email);
 			customerModel.setPhone(phone);
 			customerModel.setAddress(address);
+			
 			if (customerID > 0) {
 				customerService.editCustomer(customerModel);
+				FormSearch formSearch = (FormSearch) session.getAttribute("formSearch");
+				resp.sendRedirect(req.getContextPath() + "/search?page=" + formSearch.getPage() + "&?fullname="
+						+ formSearch.getFullname() + "&sex=" + formSearch.getSex() + "&birthdayFirst=" + formSearch.getBirthdayFirst()
+						+ "&birthdayLast=" + formSearch.getBirthdayLast());
 			} else {
 				customerService.addCustomer(customerModel);
+				resp.sendRedirect(req.getContextPath() + "/search");
 			}
-			String fullnamePageSearch = req.getParameter("fullnamePageSearch");
-			String sexPageSearch = req.getParameter("sexPageSearch");
-			String birthdayFirstPageSearch = req.getParameter("birthdayFirstPageSearch");
-			String birthdayLastPageSearch = req.getParameter("birthdayLastPageSearch");
-			resp.sendRedirect(req.getContextPath() + "/search?page=" + currentPageSearch + "&?fullname="
-					+ fullnamePageSearch + "&sex=" + sexPageSearch + "&birthdayFirst=" + birthdayFirstPageSearch
-					+ "&birthdayLast=" + birthdayLastPageSearch);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

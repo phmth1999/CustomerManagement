@@ -1,10 +1,19 @@
 package com.phmth.dto;
 
 public class FormSearch {
+	private int page;
 	private String fullname;
 	private String sex;
 	private String birthdayFirst;
 	private String birthdayLast;
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
 
 	public String getFullname() {
 		return fullname;
